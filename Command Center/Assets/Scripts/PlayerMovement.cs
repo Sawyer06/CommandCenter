@@ -1,14 +1,33 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private Transform _playerParent;
     [SerializeField] private Transform _playerCharacter;
     [SerializeField] private Rigidbody _playerRb;
+
+    [Space(10)]
     
-    private float speed;
     [SerializeField] private float _walkSpeed;
     [SerializeField] private float _runSpeed;
+    private float speed;
+
+    [Space(10)]
+
+    [SerializeField] private float _staminaDrainMult;
+    [SerializeField] private float _staminaRefillMult;
+    private float stamina;
+    private float maxStamina = 1;
+
+    [Space(10)]
+
+    [SerializeField] private Image _staminaUI;
+
+    private void Start()
+    {
+        stamina = maxStamina;    
+    }
 
     private void Update()
     {
@@ -34,13 +53,34 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Sprinting
-        if (Input.GetButton("Sprint"))
+        speed = _walkSpeed;
+
+        if (Input.GetButton("Sprint") && stamina > 0) // Button pressed.
         {
             speed = _runSpeed;
+            stamina -= 0.1f * _staminaDrainMult * Time.deltaTime; // Drain stamina.
+            UpdateUI();
         }
-        else
+        else if (!Input.GetButton("Sprint")) // Button not pressed.
         {
             speed = _walkSpeed;
+            if (stamina < maxStamina) // Do not go over max stamina.
+            {
+                stamina += 0.1f * _staminaRefillMult * Time.deltaTime; // Refill stamina.
+                UpdateUI();
+            }
+            else if (stamina >= maxStamina)
+            {
+                stamina = maxStamina;
+                UpdateUI();
+            }
         }
+    }
+
+    /// Update player UI.
+    private void UpdateUI()
+    {
+        Debug.Log("Updating UI");
+        _staminaUI.fillAmount = Mathf.Clamp01(stamina); // Needs to be between 0 and 1.
     }
 }
