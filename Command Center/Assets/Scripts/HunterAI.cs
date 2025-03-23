@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -11,6 +12,9 @@ public class HunterAI : MonoBehaviour
     [SerializeField] private Transform _player;
 
     [SerializeField] private NavMeshAgent _agent;
+
+    [SerializeField] private float _maxHealth;
+    public float health;
 
     [SerializeField] private float _visionRange;
 
@@ -32,12 +36,21 @@ public class HunterAI : MonoBehaviour
 
     private Transform target;
 
+    private void Start()
+    {
+        health = _maxHealth;
+    }
+
     private void Update()
     {
         if (enabled)
         {
             UpdateState();
             PlayerCheck();
+            if (health <= 0)
+            {
+                RunAway();
+            }
         }
 
         if (displayDebug)
@@ -114,6 +127,27 @@ public class HunterAI : MonoBehaviour
         //Debug.Log("Hunting");
     }
 
+    /// The enemy gets sent back to the spawn location after a certain amount of time. Disable everything until then.
+    private void RunAway()
+    {
+        health = _maxHealth;
+        enabled = false;
+        _agent.enabled = false;
+        GetComponent<Rigidbody>().isKinematic = true;
+        StartCoroutine(WaitToRespawn());
+    }
+
+    private IEnumerator WaitToRespawn()
+    {
+        int r = Random.Range(0, _patrolPoints.Count);
+        transform.position = _patrolPoints[r].position + Vector3.up * 10;
+        yield return new WaitForSeconds(10f);
+        enabled = true;
+        _agent.enabled = true;
+        GetComponent<Rigidbody>().isKinematic = false;
+
+    }
+
     /// Check for player.
     private void PlayerCheck()
     {
@@ -127,7 +161,7 @@ public class HunterAI : MonoBehaviour
             {
                 if (hit.transform.gameObject.CompareTag("Player")) // Player seen.
                 {
-                    Debug.Log("Player has been spotted!");
+                    //Debug.Log("Player has been spotted!");
                     activeState = State.chase;
                 }
             }

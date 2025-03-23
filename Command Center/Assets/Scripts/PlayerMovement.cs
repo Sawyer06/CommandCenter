@@ -80,7 +80,7 @@ public class PlayerMovement : MonoBehaviour
     /// Update player UI.
     private void UpdateUI()
     {
-        Debug.Log("Updating UI");
+        //Debug.Log("Updating UI");
         _staminaUI.fillAmount = Mathf.Clamp01(stamina); // Needs to be between 0 and 1.
     }
 }
