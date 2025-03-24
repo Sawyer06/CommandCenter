@@ -5,34 +5,51 @@ public class Flashlight : MonoBehaviour
     public bool on;
 
     public float charge;
+    public float maxBatteryCharge;
+    [SerializeField] private float _batteryDrainMultiplier;
+    [SerializeField] private float _batteryRefillMultiplier;
+
+    [Space(10)]
 
     [SerializeField] private float _distance;
     [SerializeField] private float _strength;
 
+    [Space(10)]
+
     [SerializeField] private Light _spotLight;
+
+    private void Start()
+    {
+        charge = maxBatteryCharge;
+    }
 
     private void Update()
     {
-        if (Input.GetButtonDown("Flashlight") && charge > 0)
+        if (Input.GetButtonDown("Flashlight")) // If designated flashlight button pressed.
         {
-            if (!on)
+            if (!on && charge > 0) // Turn on if off.
             {
                 LightOn();
             }
-            else
+            else // Turn off if on.
             {
                 LightOff();
             }
         }
 
-        if (on && charge > 0)
+        if (on && charge > 0) // Flashlight is on and has battery.
         {
             EnemyCheck();
+            charge -= 0.1f * _batteryDrainMultiplier * Time.deltaTime;
         }
-        else if (on && charge <= 0)
+        else if (on && charge <= 0) // Flashlight is on but has run out of battery.
         {
             charge = 0;
             LightOff();
+        }
+        else if (!on && charge <= maxBatteryCharge) // Flashlight is off and has not exceeded the max battery charge.
+        {
+            //charge += 0.1f * _batteryRefillMultiplier * Time.deltaTime;
         }
     }
 
@@ -49,7 +66,7 @@ public class Flashlight : MonoBehaviour
             }
         }
     }
-
+    
     private void LightOn()
     {
         on = true;

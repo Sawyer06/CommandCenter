@@ -19,18 +19,23 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _staminaRefillMult;
     private float stamina;
     private float maxStamina = 1;
+    [SerializeField] private Flashlight _flashlight;
 
     [Space(10)]
 
     [SerializeField] private Image _staminaUI;
+    [SerializeField] private Slider _batteryChargeUI;
 
     private void Start()
     {
-        stamina = maxStamina;    
+        stamina = maxStamina;
+        _batteryChargeUI.maxValue = _flashlight.maxBatteryCharge;
     }
 
     private void Update()
     {
+        UpdateUI();
+
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         // Movement
@@ -59,7 +64,6 @@ public class PlayerMovement : MonoBehaviour
         {
             speed = _runSpeed;
             stamina -= 0.1f * _staminaDrainMult * Time.deltaTime; // Drain stamina.
-            UpdateUI();
         }
         else if (!Input.GetButton("Sprint")) // Button not pressed.
         {
@@ -67,12 +71,10 @@ public class PlayerMovement : MonoBehaviour
             if (stamina < maxStamina) // Do not go over max stamina.
             {
                 stamina += 0.1f * _staminaRefillMult * Time.deltaTime; // Refill stamina.
-                UpdateUI();
             }
             else if (stamina >= maxStamina)
             {
                 stamina = maxStamina;
-                UpdateUI();
             }
         }
     }
@@ -82,5 +84,6 @@ public class PlayerMovement : MonoBehaviour
     {
         //Debug.Log("Updating UI");
         _staminaUI.fillAmount = Mathf.Clamp01(stamina); // Needs to be between 0 and 1.
+        _batteryChargeUI.value = _flashlight.charge;
     }
 }
