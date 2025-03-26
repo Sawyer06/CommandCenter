@@ -956,7 +956,7 @@ MonoBehaviour:
   health: 5
   _visionRange: 8
   _walkSpeed: 3
-  _chaseSpeed: 5
+  _chaseSpeed: 8
   activeState: 0
   _patrolPoints:
   - {fileID: 696013141}
@@ -1724,9 +1724,9 @@ MonoBehaviour:
   _playerParent: {fileID: 1943778453}
   _playerCharacter: {fileID: 1838147279}
   _playerRb: {fileID: 1943778451}
-  _walkSpeed: 20
-  _runSpeed: 45
-  _staminaDrainMult: 7
+  _walkSpeed: 15
+  _runSpeed: 30
+  _staminaDrainMult: 9
   _staminaRefillMult: 3
   _flashlight: {fileID: 1838147280}
   _staminaUI: {fileID: 1843684194}

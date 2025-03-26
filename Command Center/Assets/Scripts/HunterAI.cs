@@ -141,6 +141,7 @@ public class HunterAI : MonoBehaviour
     {
         int r = Random.Range(0, _patrolPoints.Count);
         transform.position = _patrolPoints[r].position + Vector3.up * 10;
+        activeState = State.patrol;
         yield return new WaitForSeconds(10f);
         enabled = true;
         _agent.enabled = true;
