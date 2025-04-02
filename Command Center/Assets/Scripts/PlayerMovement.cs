@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private Transform _playerParent;
     [SerializeField] private Transform _playerCharacter;
+    [SerializeField] private RawImage _playerImg;
     [SerializeField] private Rigidbody _playerRb;
 
     [Space(10)]
@@ -25,6 +27,10 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private Image _staminaUI;
     [SerializeField] private Slider _batteryChargeUI;
+
+    [Space(10)]
+
+    [SerializeField] private Animator _animator;
 
     private void Start()
     {
@@ -52,8 +58,33 @@ public class PlayerMovement : MonoBehaviour
 
             if (dir.magnitude > 0.1f)
             {
-                Quaternion targetRotation = Quaternion.LookRotation(dir);
-                _playerCharacter.rotation = Quaternion.RotateTowards(_playerCharacter.rotation, targetRotation, 500 * Time.deltaTime);
+                //Quaternion targetRotation = Quaternion.LookRotation(dir);
+                //_playerCharacter.rotation = Quaternion.RotateTowards(_playerCharacter.rotation, targetRotation, 500 * Time.deltaTime);
+                
+                if (dir.x > 0 && dir.z < dir.x)
+                {
+                    Debug.Log("Right");
+                    _animator.SetInteger("x", 1);
+                    _animator.SetInteger("z", 0);
+                }
+                else if (dir.x < 0 && dir.z > dir.x)
+                {
+                    Debug.Log("Left");
+                    _animator.SetInteger("x", -1);
+                    _animator.SetInteger("z", 0);
+                }
+                else if (dir.z > 0)
+                {
+                    Debug.Log("Back");
+                    _animator.SetInteger("z", 1);
+                    _animator.SetInteger("x", 0);
+                }
+                else if (dir.z < 0)
+                {
+                    Debug.Log("Forward");
+                    _animator.SetInteger("z", -1);
+                    _animator.SetInteger("x", 0);
+                }
             }
         }
 
