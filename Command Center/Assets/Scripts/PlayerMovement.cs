@@ -63,8 +63,8 @@ public class PlayerMovement : MonoBehaviour
 
             if (dir.magnitude > 0.1f)
             {
-                //Quaternion targetRotation = Quaternion.LookRotation(dir);
-                //_playerCharacter.rotation = Quaternion.RotateTowards(_playerCharacter.rotation, targetRotation, 500 * Time.deltaTime);
+                Quaternion targetRotation = Quaternion.LookRotation(dir);
+                _playerCharacter.rotation = Quaternion.RotateTowards(_playerCharacter.rotation, targetRotation, 500 * Time.deltaTime);
                 
                 if (dir.x > 0 && dir.z < dir.x)
                 {
