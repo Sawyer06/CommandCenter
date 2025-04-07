@@ -32,6 +32,8 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private Animator _animator;
 
+    private bool moving;
+
     private void Start()
     {
         stamina = maxStamina;
@@ -46,6 +48,9 @@ public class PlayerMovement : MonoBehaviour
 
         // Movement
         Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) moving = true;
+        else moving = false;
+
         _playerRb.MovePosition(_playerParent.position + movement * speed * Time.deltaTime);
 
         // Looking
@@ -107,6 +112,15 @@ public class PlayerMovement : MonoBehaviour
             {
                 stamina = maxStamina;
             }
+        }
+
+        if (moving)
+        {
+            _animator.SetBool("moving", true);
+        }
+        else
+        {
+            _animator.SetBool("moving", false);
         }
     }
 
