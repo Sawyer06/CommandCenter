@@ -78,13 +78,13 @@ public class PlayerMovement : MonoBehaviour
                     _animator.SetInteger("x", -1);
                     _animator.SetInteger("z", 0);
                 }
-                else if (dir.z > 0)
+                else if (dir.z > 0 && dir.x < dir.z)
                 {
                     Debug.Log("Back");
                     _animator.SetInteger("z", 1);
                     _animator.SetInteger("x", 0);
                 }
-                else if (dir.z < 0)
+                else if (dir.z < 0 && dir.x > dir.z)
                 {
                     Debug.Log("Forward");
                     _animator.SetInteger("z", -1);

@@ -9,7 +9,10 @@ public class HunterAI : MonoBehaviour
     public bool displayDebug = true;
 
     [SerializeField] private Transform _enemy;
+    [SerializeField] private Transform _enemySprite;
     [SerializeField] private Transform _player;
+
+    [SerializeField] private Vector3 _spriteOffset;
 
     [SerializeField] private NavMeshAgent _agent;
 
@@ -21,6 +24,8 @@ public class HunterAI : MonoBehaviour
     [SerializeField] private float _walkSpeed;
     [SerializeField] private float _chaseSpeed;
     private float speed;
+
+    [SerializeField] private Animator _animator;
 
     public enum State
     { 
@@ -43,6 +48,9 @@ public class HunterAI : MonoBehaviour
 
     private void Update()
     {
+        _enemySprite.eulerAngles = Vector3.zero + _spriteOffset;
+        _animator.SetFloat("yRot", _enemy.eulerAngles.y);
+
         if (enabled)
         {
             UpdateState();
