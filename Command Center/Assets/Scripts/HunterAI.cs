@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class HunterAI : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class HunterAI : MonoBehaviour
 
     [SerializeField] private Transform _enemy;
     [SerializeField] private Transform _enemySprite;
+    [SerializeField] private RawImage _enemyImg;
+    [SerializeField] private Material _enemyMat;
     [SerializeField] private Transform _player;
 
     [SerializeField] private Vector3 _spriteOffset;
@@ -51,6 +54,8 @@ public class HunterAI : MonoBehaviour
         _enemySprite.eulerAngles = Vector3.zero + _spriteOffset;
         _animator.SetFloat("yRot", _enemy.eulerAngles.y);
 
+        _enemyMat.mainTexture = _enemyImg.texture;
+
         if (enabled)
         {
             UpdateState();
@@ -88,6 +93,15 @@ public class HunterAI : MonoBehaviour
             _agent.destination = target.position;
         }
         _agent.speed = speed;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player") && enabled) // Damage player if touching.
+        {
+            GlobalVariables.m_health--;
+            //RunAway();
+        }
     }
 
     /// Patrol following patrol points placed in level.

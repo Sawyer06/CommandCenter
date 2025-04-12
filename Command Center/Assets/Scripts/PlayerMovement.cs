@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform _playerParent;
     [SerializeField] private Transform _playerCharacter;
     [SerializeField] private RawImage _playerImg;
+    [SerializeField] private Material _playerMat;
     [SerializeField] private Rigidbody _playerRb;
 
     [Space(10)]
@@ -34,6 +35,8 @@ public class PlayerMovement : MonoBehaviour
 
     private bool moving;
 
+    private bool gameOver;
+
     private void Start()
     {
         stamina = maxStamina;
@@ -43,6 +46,8 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         UpdateUI();
+        _playerMat.mainTexture = _playerImg.texture;
+
 
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -52,6 +57,8 @@ public class PlayerMovement : MonoBehaviour
         else moving = false;
 
         _playerRb.MovePosition(_playerParent.position + movement * speed * Time.deltaTime);
+
+        if (GlobalVariables.m_health <= 0 && !gameOver) GameOver();
 
         // Looking
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -66,27 +73,28 @@ public class PlayerMovement : MonoBehaviour
                 Quaternion targetRotation = Quaternion.LookRotation(dir);
                 _playerCharacter.rotation = Quaternion.RotateTowards(_playerCharacter.rotation, targetRotation, 500 * Time.deltaTime);
                 
+                // Update animator based on where mouse is.
                 if (dir.x > 0 && dir.z < dir.x)
                 {
-                    Debug.Log("Right");
+                    //Debug.Log("Right");
                     _animator.SetInteger("x", 1);
                     _animator.SetInteger("z", 0);
                 }
                 else if (dir.x < 0 && dir.z > dir.x)
                 {
-                    Debug.Log("Left");
+                    //Debug.Log("Left");
                     _animator.SetInteger("x", -1);
                     _animator.SetInteger("z", 0);
                 }
                 else if (dir.z > 0 && dir.x < dir.z)
                 {
-                    Debug.Log("Back");
+                    //Debug.Log("Back");
                     _animator.SetInteger("z", 1);
                     _animator.SetInteger("x", 0);
                 }
                 else if (dir.z < 0 && dir.x > dir.z)
                 {
-                    Debug.Log("Forward");
+                    //Debug.Log("Forward");
                     _animator.SetInteger("z", -1);
                     _animator.SetInteger("x", 0);
                 }
@@ -130,5 +138,13 @@ public class PlayerMovement : MonoBehaviour
         //Debug.Log("Updating UI");
         _staminaUI.fillAmount = Mathf.Clamp01(stamina); // Needs to be between 0 and 1.
         _batteryChargeUI.value = _flashlight.charge;
+    }
+
+    private void GameOver()
+    {
+        Debug.Log("Game Over");
+        gameOver = true;
+
+
     }
 }

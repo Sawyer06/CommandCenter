@@ -210,6 +210,7 @@ GameObject:
   - component: {fileID: 6373593295250361230}
   - component: {fileID: 3146417156019962222}
   - component: {fileID: 7466661856942843872}
+  - component: {fileID: 7974777747321174758}
   m_Layer: 0
   m_Name: LeviathanNav
   m_TagString: Enemy
@@ -323,7 +324,7 @@ MonoBehaviour:
   _player: {fileID: 0}
   _spriteOffset: {x: 45, y: 0, z: 0}
   _agent: {fileID: 3146417156019962222}
-  _maxHealth: 3
+  _maxHealth: 5
   health: 5
   _visionRange: 8
   _walkSpeed: 3
@@ -335,6 +336,27 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+--- !u!135 &7974777747321174758
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6851494798278663518}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6942240499350814502
 GameObject:
   m_ObjectHideFlags: 0
