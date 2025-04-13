@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class HunterAI : MonoBehaviour
 {
@@ -9,7 +10,12 @@ public class HunterAI : MonoBehaviour
     public bool displayDebug = true;
 
     [SerializeField] private Transform _enemy;
+    [SerializeField] private Transform _enemySprite;
+    [SerializeField] private RawImage _enemyImg;
+    [SerializeField] private Material _enemyMat;
     [SerializeField] private Transform _player;
+
+    [SerializeField] private Vector3 _spriteOffset;
 
     [SerializeField] private NavMeshAgent _agent;
 
@@ -20,13 +26,18 @@ public class HunterAI : MonoBehaviour
 
     [SerializeField] private float _walkSpeed;
     [SerializeField] private float _chaseSpeed;
+    [SerializeField] private float _runawaySpeed;
     private float speed;
+
+    [SerializeField] private Animator _animator;
+    [SerializeField] private Animator _fadeAnimator;
+    [SerializeField] private ParticleSystem _hitParticles;
 
     public enum State
     { 
         patrol,
         chase,
-        hunt
+        hunt,
     }
 
     public State activeState;
@@ -39,10 +50,16 @@ public class HunterAI : MonoBehaviour
     private void Start()
     {
         health = _maxHealth;
+        _animator.SetBool("enabled", enabled);
     }
 
     private void Update()
     {
+        _enemySprite.eulerAngles = Vector3.zero + _spriteOffset;
+        _animator.SetFloat("yRot", _enemy.eulerAngles.y);
+
+        _enemyMat.mainTexture = _enemyImg.texture;
+
         if (enabled)
         {
             UpdateState();
@@ -50,6 +67,10 @@ public class HunterAI : MonoBehaviour
             if (health <= 0)
             {
                 RunAway();
+            }
+            else if (health <= _maxHealth / 2)
+            {
+                _hitParticles.Play();
             }
         }
 
@@ -80,6 +101,24 @@ public class HunterAI : MonoBehaviour
             _agent.destination = target.position;
         }
         _agent.speed = speed;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player") && enabled) // Damage player if touching.
+        {
+            _fadeAnimator.SetBool("fadeOut", true);
+            GlobalVariables.m_health--;
+            
+            if (GlobalVariables.m_health > 0)
+            {
+                RunAway();
+            }
+            else
+            {
+                _fadeAnimator.SetBool("fadeOut", true);
+            }
+        }
     }
 
     /// Patrol following patrol points placed in level.
@@ -134,16 +173,24 @@ public class HunterAI : MonoBehaviour
         enabled = false;
         _agent.enabled = false;
         GetComponent<Rigidbody>().isKinematic = true;
+        _animator.SetBool("enabled", enabled);
+        //_animator.Play("Leviathan_Run");
         StartCoroutine(WaitToRespawn());
     }
 
     private IEnumerator WaitToRespawn()
     {
+        _player.GetComponent<PlayerMovement>().enabled = false;
+        yield return new WaitForSeconds(2);
+        _player.GetComponent<PlayerMovement>().enabled = true;
+        _fadeAnimator.SetBool("fadeOut", false);
         int r = Random.Range(0, _patrolPoints.Count);
+        target = _patrolPoints[r];
         transform.position = _patrolPoints[r].position + Vector3.up * 10;
         activeState = State.patrol;
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(5f);
         enabled = true;
+        _animator.SetBool("enabled", enabled);
         _agent.enabled = true;
         GetComponent<Rigidbody>().isKinematic = false;
 
