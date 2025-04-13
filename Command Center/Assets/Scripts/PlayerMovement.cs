@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     
     [SerializeField] private float _walkSpeed;
     [SerializeField] private float _runSpeed;
-    private float speed;
+    public float speed;
 
     [Space(10)]
 
@@ -28,14 +28,16 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private Image _staminaUI;
     [SerializeField] private Slider _batteryChargeUI;
+    [SerializeField] private GameObject _gameOverScreen;
 
     [Space(10)]
 
     [SerializeField] private Animator _animator;
+    [SerializeField] private Animator _damageAnimator;
 
     private bool moving;
 
-    private bool gameOver;
+    private bool gameOver = false;
 
     private void Start()
     {
@@ -52,13 +54,17 @@ public class PlayerMovement : MonoBehaviour
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         // Movement
-        Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        Vector3 movement = !gameOver ? new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) : Vector3.zero;
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) moving = true;
         else moving = false;
 
         _playerRb.MovePosition(_playerParent.position + movement * speed * Time.deltaTime);
 
-        if (GlobalVariables.m_health <= 0 && !gameOver) GameOver();
+        if (GlobalVariables.m_health <= 0 && !gameOver)
+        {
+            GameOver();
+        }
+        Debug.Log("Health = " + GlobalVariables.m_health + ", GameOver: " + gameOver);
 
         // Looking
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -101,17 +107,38 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        // Sprinting
-        speed = _walkSpeed;
+        if (GlobalVariables.m_health >= 2)
+        {
+            speed = _walkSpeed;
+        }
+        else
+        {
+            speed = _walkSpeed / 2;
+        }
 
+        // Sprinting
         if (Input.GetButton("Sprint") && stamina > 0) // Button pressed.
         {
-            speed = _runSpeed;
+            if (GlobalVariables.m_health >= 2)
+            {
+                speed = _runSpeed;
+            }
+            else
+            {
+                speed = _runSpeed / 2;
+            }
             stamina -= 0.1f * _staminaDrainMult * Time.deltaTime; // Drain stamina.
         }
         else if (!Input.GetButton("Sprint")) // Button not pressed.
         {
-            speed = _walkSpeed;
+            if (GlobalVariables.m_health >= 2)
+            {
+                speed = _walkSpeed;
+            }
+            else
+            {
+                speed = _walkSpeed / 2;
+            }
             if (stamina < maxStamina) // Do not go over max stamina.
             {
                 stamina += 0.1f * _staminaRefillMult * Time.deltaTime; // Refill stamina.
@@ -138,13 +165,22 @@ public class PlayerMovement : MonoBehaviour
         //Debug.Log("Updating UI");
         _staminaUI.fillAmount = Mathf.Clamp01(stamina); // Needs to be between 0 and 1.
         _batteryChargeUI.value = _flashlight.charge;
+
+        if (GlobalVariables.m_health < 2)
+        {
+            _damageAnimator.enabled = true;
+        }
+        else
+        {
+            _damageAnimator.enabled = false;
+        }
     }
 
     private void GameOver()
     {
         Debug.Log("Game Over");
         gameOver = true;
-
+        _gameOverScreen.SetActive(true);
 
     }
 }

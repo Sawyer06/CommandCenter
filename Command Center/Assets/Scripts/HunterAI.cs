@@ -26,15 +26,18 @@ public class HunterAI : MonoBehaviour
 
     [SerializeField] private float _walkSpeed;
     [SerializeField] private float _chaseSpeed;
+    [SerializeField] private float _runawaySpeed;
     private float speed;
 
     [SerializeField] private Animator _animator;
+    [SerializeField] private Animator _fadeAnimator;
+    [SerializeField] private ParticleSystem _hitParticles;
 
     public enum State
     { 
         patrol,
         chase,
-        hunt
+        hunt,
     }
 
     public State activeState;
@@ -47,6 +50,7 @@ public class HunterAI : MonoBehaviour
     private void Start()
     {
         health = _maxHealth;
+        _animator.SetBool("enabled", enabled);
     }
 
     private void Update()
@@ -63,6 +67,10 @@ public class HunterAI : MonoBehaviour
             if (health <= 0)
             {
                 RunAway();
+            }
+            else if (health <= _maxHealth / 2)
+            {
+                _hitParticles.Play();
             }
         }
 
@@ -99,8 +107,17 @@ public class HunterAI : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player") && enabled) // Damage player if touching.
         {
+            _fadeAnimator.SetBool("fadeOut", true);
             GlobalVariables.m_health--;
-            //RunAway();
+            
+            if (GlobalVariables.m_health > 0)
+            {
+                RunAway();
+            }
+            else
+            {
+                _fadeAnimator.SetBool("fadeOut", true);
+            }
         }
     }
 
@@ -156,16 +173,24 @@ public class HunterAI : MonoBehaviour
         enabled = false;
         _agent.enabled = false;
         GetComponent<Rigidbody>().isKinematic = true;
+        _animator.SetBool("enabled", enabled);
+        //_animator.Play("Leviathan_Run");
         StartCoroutine(WaitToRespawn());
     }
 
     private IEnumerator WaitToRespawn()
     {
+        _player.GetComponent<PlayerMovement>().enabled = false;
+        yield return new WaitForSeconds(2);
+        _player.GetComponent<PlayerMovement>().enabled = true;
+        _fadeAnimator.SetBool("fadeOut", false);
         int r = Random.Range(0, _patrolPoints.Count);
+        target = _patrolPoints[r];
         transform.position = _patrolPoints[r].position + Vector3.up * 10;
         activeState = State.patrol;
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(5f);
         enabled = true;
+        _animator.SetBool("enabled", enabled);
         _agent.enabled = true;
         GetComponent<Rigidbody>().isKinematic = false;
 

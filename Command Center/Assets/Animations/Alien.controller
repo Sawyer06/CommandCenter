@@ -11,6 +11,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 3
     m_ConditionEvent: yRot
     m_EventTreshold: 315
+  - m_ConditionMode: 1
+    m_ConditionEvent: enabled
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2451670953017524845}
   m_Solo: 0
@@ -65,6 +68,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 4
     m_ConditionEvent: yRot
     m_EventTreshold: 315
+  - m_ConditionMode: 1
+    m_ConditionEvent: enabled
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8067819184516270696}
   m_Solo: 0
@@ -93,6 +99,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 4
     m_ConditionEvent: yRot
     m_EventTreshold: 225
+  - m_ConditionMode: 1
+    m_ConditionEvent: enabled
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1748844658266539495}
   m_Solo: 0
@@ -118,6 +127,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 4
     m_ConditionEvent: yRot
     m_EventTreshold: 45
+  - m_ConditionMode: 1
+    m_ConditionEvent: enabled
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4623597472766571678}
   m_Solo: 0
@@ -153,6 +165,9 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: -8067819184516270696}
     m_Position: {x: 50, y: -70, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 7952866066848320313}
+    m_Position: {x: 687.62024, y: 36.65654, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: -3355305210020740165}
@@ -181,6 +196,12 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: enabled
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 1
     m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
@@ -268,6 +289,32 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: a9f4e414844616b4d9a148f6eb78b6ce, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
+--- !u!1102 &7952866066848320313
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Leviathan_Run
+  m_Speed: 2
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: fdd8ae02b5bd46f45a75fa5bbd5e7c52, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
