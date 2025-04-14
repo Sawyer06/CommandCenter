@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Astro_Left_Idle
+  m_Name: Leviathan_Back_Walk
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,7 +21,11 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 2800000, guid: ce9fa46854303544ca6fcf1c352b3ef5, type: 3}
+      value: {fileID: 2800000, guid: 96257a44e75086f449f288dcb3171504, type: 3}
+    - time: 0.25
+      value: {fileID: 2800000, guid: fdeaa90db73d40a41b5c40d8aafd7f4b, type: 3}
+    - time: 0.5
+      value: {fileID: 2800000, guid: 96257a44e75086f449f288dcb3171504, type: 3}
     attribute: m_Texture
     path: 
     classID: 114
@@ -44,13 +48,15 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 2800000, guid: ce9fa46854303544ca6fcf1c352b3ef5, type: 3}
+    - {fileID: 2800000, guid: 96257a44e75086f449f288dcb3171504, type: 3}
+    - {fileID: 2800000, guid: fdeaa90db73d40a41b5c40d8aafd7f4b, type: 3}
+    - {fileID: 2800000, guid: 96257a44e75086f449f288dcb3171504, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.016666668
+    m_StopTime: 0.51666665
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
