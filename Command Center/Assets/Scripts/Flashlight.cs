@@ -18,6 +18,11 @@ public class Flashlight : MonoBehaviour
 
     [SerializeField] private Light _spotLight;
 
+    [Space(10)]
+
+    [SerializeField] private AudioSource _onSound;
+    [SerializeField] private AudioSource _offSound;
+
     private void Start()
     {
         charge = maxBatteryCharge;
@@ -71,10 +76,18 @@ public class Flashlight : MonoBehaviour
     {
         on = true;
         _spotLight.enabled = true;
+        if (!_onSound.isPlaying)
+        {
+            _onSound.Play();
+        }
     }
     private void LightOff()
     {
         on = false;
         _spotLight.enabled = false;
+        if (!_offSound.isPlaying)
+        {
+            _offSound.Play();
+        }
     }
 }

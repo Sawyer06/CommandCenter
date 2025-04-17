@@ -61,7 +61,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Astro_Right_Walk
-  m_Speed: 2
+  m_Speed: 1.7
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 2196438441726234958}
@@ -308,7 +308,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Astro_Forward_Walk
-  m_Speed: 2
+  m_Speed: 1.7
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -95772215073471244}
@@ -366,7 +366,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Astro_Left_Walk
-  m_Speed: 2
+  m_Speed: 1.7
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 3696468927029984749}
@@ -1040,7 +1040,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Astro_Back_Walk
-  m_Speed: 2
+  m_Speed: 1.7
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 3339738707691564370}

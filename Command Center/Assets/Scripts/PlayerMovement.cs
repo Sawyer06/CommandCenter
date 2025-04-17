@@ -35,6 +35,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private Animator _damageAnimator;
 
+    [Space(10)]
+
+    [SerializeField] private AudioSource _footstepSound;
+    [SerializeField] private AudioClip _walkClip;
+    [SerializeField] private AudioClip _runClip;
+    [SerializeField] private AudioSource _looseSound;
+
     private bool moving;
 
     private bool gameOver = false;
@@ -107,21 +114,13 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (GlobalVariables.m_health >= 2)
-        {
-            speed = _walkSpeed;
-        }
-        else
-        {
-            speed = _walkSpeed / 2;
-        }
-
         // Sprinting
         if (Input.GetButton("Sprint") && stamina > 0) // Button pressed.
         {
             if (GlobalVariables.m_health >= 2)
             {
                 speed = _runSpeed;
+                _footstepSound.clip = _runClip;
             }
             else
             {
@@ -134,11 +133,14 @@ public class PlayerMovement : MonoBehaviour
             if (GlobalVariables.m_health >= 2)
             {
                 speed = _walkSpeed;
+                _footstepSound.clip = _walkClip;
             }
             else
             {
                 speed = _walkSpeed / 2;
+                _footstepSound.clip = _walkClip;
             }
+            
             if (stamina < maxStamina) // Do not go over max stamina.
             {
                 stamina += 0.1f * _staminaRefillMult * Time.deltaTime; // Refill stamina.
@@ -152,6 +154,10 @@ public class PlayerMovement : MonoBehaviour
         if (moving)
         {
             _animator.SetBool("moving", true);
+            if (!_footstepSound.isPlaying)
+            {
+                _footstepSound.Play();
+            }
         }
         else
         {
@@ -181,6 +187,9 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("Game Over");
         gameOver = true;
         _gameOverScreen.SetActive(true);
-
+        if (!_looseSound.isPlaying)
+        {
+            _looseSound.Play();
+        }
     }
 }

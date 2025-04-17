@@ -33,6 +33,12 @@ public class HunterAI : MonoBehaviour
     [SerializeField] private Animator _fadeAnimator;
     [SerializeField] private ParticleSystem _hitParticles;
 
+    [Space(10)]
+
+    [SerializeField] private AudioSource _footstepSound;
+    [SerializeField] private AudioClip _walkClip;
+    [SerializeField] private AudioClip _runClip;
+
     public enum State
     { 
         patrol,
@@ -77,6 +83,11 @@ public class HunterAI : MonoBehaviour
         if (displayDebug)
         {
             DisplayEditorDebugInfo();
+        }
+
+        if (!_footstepSound.isPlaying && enabled)
+        {
+            _footstepSound.Play();
         }
     }
 
@@ -137,6 +148,7 @@ public class HunterAI : MonoBehaviour
                 target = _patrolPoints[patrolIndex];
             }
         }
+        _footstepSound.clip = _walkClip;
     }
 
     /// Go through the patrol point list, and wrap back around when the end is reached.
@@ -158,6 +170,7 @@ public class HunterAI : MonoBehaviour
         {
             target = _player;
         }
+        _footstepSound.clip = _runClip;
     }
 
     /// Go investigate a certain position, possibly an old location of the player.
