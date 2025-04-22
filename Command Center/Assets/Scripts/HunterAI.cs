@@ -17,6 +17,8 @@ public class HunterAI : MonoBehaviour
 
     [SerializeField] private Vector3 _spriteOffset;
 
+    [Space(10)]
+
     [SerializeField] private NavMeshAgent _agent;
 
     [SerializeField] private float _maxHealth;
@@ -24,10 +26,21 @@ public class HunterAI : MonoBehaviour
 
     [SerializeField] private float _visionRange;
 
+    private float engage;
+    [SerializeField] private float _giveUpTime;
+    
+    [Space(10)]
+
     [SerializeField] private float _walkSpeed;
     [SerializeField] private float _chaseSpeed;
     [SerializeField] private float _runawaySpeed;
     private float speed;
+
+    [Space(10)]
+
+    [SerializeField] private float _respawnTime;
+
+    [Space(10)]
 
     [SerializeField] private Animator _animator;
     [SerializeField] private Animator _fadeAnimator;
@@ -38,7 +51,9 @@ public class HunterAI : MonoBehaviour
     [SerializeField] private AudioSource _footstepSound;
     [SerializeField] private AudioClip _walkClip;
     [SerializeField] private AudioClip _runClip;
-
+    [SerializeField] private AudioSource _chaseSound;
+    [SerializeField] private AudioSource _patrolSound;
+    
     public enum State
     { 
         patrol,
@@ -57,6 +72,7 @@ public class HunterAI : MonoBehaviour
     {
         health = _maxHealth;
         _animator.SetBool("enabled", enabled);
+        StartCoroutine(SoundLoop());
     }
 
     private void Update()
@@ -72,7 +88,7 @@ public class HunterAI : MonoBehaviour
             PlayerCheck();
             if (health <= 0)
             {
-                RunAway();
+                RunAway(false);
             }
             else if (health <= _maxHealth / 2)
             {
@@ -99,7 +115,6 @@ public class HunterAI : MonoBehaviour
                 Patrol();
                 break;
             case 1:
-
                 Chase();
                 break;
             case 2:
@@ -123,7 +138,7 @@ public class HunterAI : MonoBehaviour
             
             if (GlobalVariables.m_health > 0)
             {
-                RunAway();
+                RunAway(true);
             }
             else
             {
@@ -165,6 +180,12 @@ public class HunterAI : MonoBehaviour
     private void Chase()
     {
         //Debug.Log("Chasing");
+        engage -= 1f * Time.deltaTime; // Constantly subtract from engage. Refilled once seen again.
+        if (engage <= 0) // Give up on chasing player if not seen anymore.
+        {
+            activeState = State.patrol;
+        }
+
         speed = _chaseSpeed;
         if (target != _player)
         {
@@ -180,7 +201,7 @@ public class HunterAI : MonoBehaviour
     }
 
     /// The enemy gets sent back to the spawn location after a certain amount of time. Disable everything until then.
-    private void RunAway()
+    private void RunAway(bool disablePlayer)
     {
         health = _maxHealth;
         enabled = false;
@@ -188,20 +209,24 @@ public class HunterAI : MonoBehaviour
         GetComponent<Rigidbody>().isKinematic = true;
         _animator.SetBool("enabled", enabled);
         //_animator.Play("Leviathan_Run");
-        StartCoroutine(WaitToRespawn());
+        StartCoroutine(WaitToRespawn(disablePlayer));
     }
 
-    private IEnumerator WaitToRespawn()
+    private IEnumerator WaitToRespawn(bool disablePlayer)
     {
-        _player.GetComponent<PlayerMovement>().enabled = false;
+        if (disablePlayer) _player.GetComponent<PlayerMovement>().enabled = false;
         yield return new WaitForSeconds(2);
         _player.GetComponent<PlayerMovement>().enabled = true;
+
         _fadeAnimator.SetBool("fadeOut", false);
-        int r = Random.Range(0, _patrolPoints.Count);
+        int r = Random.Range(0, _patrolPoints.Count); // Pick a random patrol point to respawn at.
         target = _patrolPoints[r];
-        transform.position = _patrolPoints[r].position + Vector3.up * 10;
+        transform.position = _patrolPoints[r].position + Vector3.up * 10; // Spawn above it and wait.
         activeState = State.patrol;
-        yield return new WaitForSeconds(5f);
+        
+        yield return new WaitForSeconds(_respawnTime); // Wait to respawn.
+        
+        // Re activate everything.
         enabled = true;
         _animator.SetBool("enabled", enabled);
         _agent.enabled = true;
@@ -222,11 +247,31 @@ public class HunterAI : MonoBehaviour
             {
                 if (hit.transform.gameObject.CompareTag("Player")) // Player seen.
                 {
+                    if (engage <= 0.1f && !_chaseSound.isPlaying)
+                    {
+                        _chaseSound.Play();
+                    }
                     //Debug.Log("Player has been spotted!");
+                    engage = _giveUpTime; // Reset the engage timer.
                     activeState = State.chase;
                 }
             }
         }
+    }
+
+    /// Loop of sounds played randomly while patrolling.
+    private IEnumerator SoundLoop()
+    {
+        yield return new WaitForSeconds(1);
+        int r = Random.Range(6, 12);
+        yield return new WaitForSeconds(r);
+        if (!_patrolSound.isPlaying && !_chaseSound.isPlaying)
+        {
+            float pitch = Random.Range(0.7f, 0.9f); // Play at random pitch for variation.
+            _patrolSound.pitch = pitch;
+            _patrolSound.Play();
+        }
+        StartCoroutine(SoundLoop());
     }
 
     /// Helper for showing the enemy vision in editor.
