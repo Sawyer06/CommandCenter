@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Space(10)]
 
+    [SerializeField] private TextMeshProUGUI _pickupAmntTxt;
     [SerializeField] private Image _staminaUI;
     [SerializeField] private Slider _batteryChargeUI;
     [SerializeField] private GameObject _gameOverScreen;
@@ -128,7 +130,7 @@ public class PlayerMovement : MonoBehaviour
             }
             stamina -= 0.1f * _staminaDrainMult * Time.deltaTime; // Drain stamina.
         }
-        else if (!Input.GetButton("Sprint")) // Button not pressed.
+        else if (!Input.GetButton("Sprint") || stamina <= 0) // Button not pressed.
         {
             if (GlobalVariables.m_health >= 2)
             {
@@ -137,7 +139,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                speed = _walkSpeed / 2;
+                speed = _walkSpeed / 1.5f;
                 _footstepSound.clip = _walkClip;
             }
             
@@ -180,6 +182,8 @@ public class PlayerMovement : MonoBehaviour
         {
             _damageAnimator.enabled = false;
         }
+
+        _pickupAmntTxt.text = GlobalVariables.m_communicationParts.ToString() + "/" + GlobalVariables.m_maxCommunicationParts.ToString();
     }
 
     private void GameOver()
@@ -190,6 +194,17 @@ public class PlayerMovement : MonoBehaviour
         if (!_looseSound.isPlaying)
         {
             _looseSound.Play();
+        }
+    }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        // Check if player object collides with communication part.
+        if (other.gameObject.CompareTag("PickUp"))
+        {
+            other.gameObject.SetActive(false);
+
+            GlobalVariables.m_communicationParts++;
         }
     }
 }

@@ -90,4 +90,8 @@ public class Flashlight : MonoBehaviour
             _offSound.Play();
         }
     }
+    public void Charging()
+    {
+        charge += 0.0025f;
+    }
 }
