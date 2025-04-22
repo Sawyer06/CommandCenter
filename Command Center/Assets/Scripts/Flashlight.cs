@@ -71,7 +71,7 @@ public class Flashlight : MonoBehaviour
             }
         }
     }
-    
+
     private void LightOn()
     {
         on = true;
@@ -92,6 +92,9 @@ public class Flashlight : MonoBehaviour
     }
     public void Charging()
     {
-        charge += 0.0025f;
+        if (charge! > maxBatteryCharge)
+        {
+            charge += 0.0025f;
+        }
     }
 }

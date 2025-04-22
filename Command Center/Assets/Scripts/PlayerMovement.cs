@@ -31,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Image _staminaUI;
     [SerializeField] private Slider _batteryChargeUI;
     [SerializeField] private GameObject _gameOverScreen;
+    [SerializeField] private GameObject _winScreen;
 
     [Space(10)]
 
@@ -59,6 +60,11 @@ public class PlayerMovement : MonoBehaviour
         UpdateUI();
         _playerMat.mainTexture = _playerImg.texture;
 
+        if (GlobalVariables.m_communicationParts >= 5)
+        {
+            _winScreen.SetActive(true);
+            GlobalVariables.m_health = 2;
+        }
 
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
