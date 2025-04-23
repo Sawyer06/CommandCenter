@@ -44,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private AudioClip _walkClip;
     [SerializeField] private AudioClip _runClip;
     [SerializeField] private AudioSource _looseSound;
+    [SerializeField] private AudioSource _pickupSound;
 
     private bool moving;
 
@@ -79,7 +80,7 @@ public class PlayerMovement : MonoBehaviour
         {
             GameOver();
         }
-        Debug.Log("Health = " + GlobalVariables.m_health + ", GameOver: " + gameOver);
+        //Debug.Log("Health = " + GlobalVariables.m_health + ", GameOver: " + gameOver);
 
         // Looking
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -209,7 +210,10 @@ public class PlayerMovement : MonoBehaviour
         if (other.gameObject.CompareTag("PickUp"))
         {
             other.gameObject.SetActive(false);
-
+            if (!_pickupSound.isPlaying)
+            {
+                _pickupSound.Play();
+            }
             GlobalVariables.m_communicationParts++;
         }
     }

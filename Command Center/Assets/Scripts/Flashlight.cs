@@ -92,7 +92,7 @@ public class Flashlight : MonoBehaviour
     }
     public void Charging()
     {
-        if (charge! > maxBatteryCharge)
+        if (charge < maxBatteryCharge)
         {
             charge += 0.0025f;
         }
