@@ -13,7 +13,7 @@ public class ChargeFlashlight : MonoBehaviour
         if(other.transform.tag.Equals("Player"))
         {
             //gotFlashLight = other.transform.GetChild(3).GetComponent<Flashlight>();
-            if (Input.GetKey(KeyCode.G))
+            if (Input.GetKey(KeyCode.E))
             {
                 gotFlashLight.Charging();
             }
