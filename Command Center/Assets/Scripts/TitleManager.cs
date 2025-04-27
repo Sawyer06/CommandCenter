@@ -9,7 +9,7 @@ public class TitleManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape)) QuitGame();
 
-        if (Input.GetKeyDown(KeyCode.E)) StartGame("Spaceship");
+        if (Input.GetKeyDown(KeyCode.E) && isCutscene) StartGame("Spaceship");
     }
 
     public void StartGame(string sceneToLoad)
