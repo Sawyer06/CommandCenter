@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -64,7 +66,9 @@ public class PlayerMovement : MonoBehaviour
         if (GlobalVariables.m_communicationParts >= 5)
         {
             _winScreen.SetActive(true);
+            transform.position = new Vector3(0, -100, 0); // Remove from all sound.
             GlobalVariables.m_health = 2;
+            enabled = false;
         }
 
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -202,6 +206,14 @@ public class PlayerMovement : MonoBehaviour
         {
             _looseSound.Play();
         }
+        StartCoroutine(ReloadScene());
+    }
+
+    private IEnumerator ReloadScene()
+    {
+        yield return new WaitForSeconds(5f);
+        GlobalVariables.m_health = 2;
+        SceneManager.LoadScene("Spaceship");
     }
     
     private void OnTriggerEnter(Collider other)

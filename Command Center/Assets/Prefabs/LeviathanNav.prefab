@@ -5288,7 +5288,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 0.5, y: 1, z: 0.5}
   m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!195 &3146417156019962222
 NavMeshAgent:
@@ -5333,11 +5333,11 @@ MonoBehaviour:
   _player: {fileID: 0}
   _spriteOffset: {x: 45, y: 0, z: 0}
   _agent: {fileID: 3146417156019962222}
-  _maxHealth: 5
-  health: 5
+  _maxHealth: 4
+  health: 4
   _visionRange: 6
   _giveUpTime: 7
-  _walkSpeed: 2
+  _walkSpeed: 3
   _chaseSpeed: 6
   _runawaySpeed: 12
   _respawnTime: 8

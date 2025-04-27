@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Title.unity
     guid: 6674ce9ce7ed1f64cb44828ef32a8713
   - enabled: 1
+    path: Assets/Scenes/IntroCutscene.unity
+    guid: 76244a60a409094499420bd7b1db11c9
+  - enabled: 1
     path: Assets/Scenes/Spaceship.unity
     guid: ba7a83ecc57e9fe4891f49a4c2fcaf4d
   - enabled: 0
