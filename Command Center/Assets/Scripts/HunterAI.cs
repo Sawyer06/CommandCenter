@@ -223,7 +223,7 @@ public class HunterAI : MonoBehaviour
         target = _patrolPoints[r];
         transform.position = _patrolPoints[r].position + Vector3.up * 10; // Spawn above it and wait.
         activeState = State.patrol;
-        
+        if (_hitParticles.isPlaying) _hitParticles.Stop();
         yield return new WaitForSeconds(_respawnTime); // Wait to respawn.
         
         // Re activate everything.
